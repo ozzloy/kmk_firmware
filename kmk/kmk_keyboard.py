@@ -6,7 +6,8 @@ except ImportError:
 from collections import namedtuple
 from keypad import Event as KeyEvent
 
-from kmk.hid import BLEHID, USBHID, AbstractHID, HIDModes
+# from kmk.hid import BLEHID, USBHID, AbstractHID, HIDModes
+from kmk.hid import BLEHID, AbstractHID, HIDModes
 from kmk.keys import KC, Key
 from kmk.modules import Module
 from kmk.scanners.keypad import MatrixScanner
@@ -53,7 +54,8 @@ class KMKKeyboard:
     keys_pressed = set()
     axes = set()
     _coordkeys_pressed = {}
-    hid_type = HIDModes.USB
+    # hid_type = HIDModes.USB
+    hid_type = HIDModes.BLE
     secondary_hid_type = None
     _hid_helper = None
     _hid_send_enabled = False
@@ -287,8 +289,8 @@ class KMKKeyboard:
     def _init_hid(self) -> None:
         if self.hid_type == HIDModes.NOOP:
             self._hid_helper = AbstractHID
-        elif self.hid_type == HIDModes.USB:
-            self._hid_helper = USBHID
+        # elif self.hid_type == HIDModes.USB:
+        #     self._hid_helper = USBHID
         elif self.hid_type == HIDModes.BLE:
             self._hid_helper = BLEHID
         else:

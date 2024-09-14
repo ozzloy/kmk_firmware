@@ -1,5 +1,5 @@
 import supervisor
-import usb_hid
+# import usb_hid
 from micropython import const
 
 from storage import getmount
@@ -253,36 +253,36 @@ class AbstractHID:
         return False
 
 
-class USBHID(AbstractHID):
-    REPORT_BYTES = 9
-
-    def __init__(self, **kwargs):
-
-        self.devices = {}
-
-        for device in usb_hid.devices:
-            us = device.usage
-            up = device.usage_page
-
-            if up == HIDUsagePage.CONSUMER and us == HIDUsage.CONSUMER:
-                self.devices[HIDReportTypes.CONSUMER] = device
-            elif up == HIDUsagePage.KEYBOARD and us == HIDUsage.KEYBOARD:
-                self.devices[HIDReportTypes.KEYBOARD] = device
-            elif up == HIDUsagePage.MOUSE and us == HIDUsage.MOUSE:
-                self.devices[HIDReportTypes.MOUSE] = device
-            elif up == HIDUsagePage.SYSCONTROL and us == HIDUsage.SYSCONTROL:
-                self.devices[HIDReportTypes.SYSCONTROL] = device
-
-        super().__init__(**kwargs)
-
-    def hid_send(self, evt):
-        if not supervisor.runtime.usb_connected:
-            return
-
-        # int, can be looked up in HIDReportTypes
-        reporting_device_const = evt[0]
-
-        return self.devices[reporting_device_const].send_report(evt[1:])
+# class USBHID(AbstractHID):
+#     REPORT_BYTES = 9
+#
+#     def __init__(self, **kwargs):
+#
+#         self.devices = {}
+#
+#         for device in usb_hid.devices:
+#             us = device.usage
+#             up = device.usage_page
+#
+#             if up == HIDUsagePage.CONSUMER and us == HIDUsage.CONSUMER:
+#                 self.devices[HIDReportTypes.CONSUMER] = device
+#             elif up == HIDUsagePage.KEYBOARD and us == HIDUsage.KEYBOARD:
+#                 self.devices[HIDReportTypes.KEYBOARD] = device
+#             elif up == HIDUsagePage.MOUSE and us == HIDUsage.MOUSE:
+#                 self.devices[HIDReportTypes.MOUSE] = device
+#             elif up == HIDUsagePage.SYSCONTROL and us == HIDUsage.SYSCONTROL:
+#                 self.devices[HIDReportTypes.SYSCONTROL] = device
+#
+#         super().__init__(**kwargs)
+#
+#     def hid_send(self, evt):
+#         if not supervisor.runtime.usb_connected:
+#             return
+#
+#         # int, can be looked up in HIDReportTypes
+#         reporting_device_const = evt[0]
+#
+#         return self.devices[reporting_device_const].send_report(evt[1:])
 
 
 class BLEHID(AbstractHID):
